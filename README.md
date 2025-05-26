@@ -1,43 +1,46 @@
-Demand Forecasting for Pizza Sales using Machine Learning
-🧠 Introduction
+Machine Learning Models for Pizza Demand Forecasting
 
-Effective demand forecasting is crucial for businesses in the food and beverage industry. By anticipating future sales, businesses can optimize inventory, reduce waste, and enhance profitability. This project explores machine learning models to predict daily pizza sales for different pizza types using a real dataset from a fictional pizzeria. The primary goal is to identify the most accurate and interpretable model for demand forecasting.
-📚 Literature Review
+1. Introduction
 
-Demand forecasting using machine learning has gained momentum in recent years. Traditional linear models such as Linear Regression offer simplicity and interpretability but may fall short in capturing non-linear trends and complex interactions.
+Demand forecasting plays a critical role in optimizing supply chains, inventory management, and staffing in the food and beverage industry. This project explores machine learning approaches to forecast pizza sales using a historical dataset. The objective is to build accurate models that can predict future demand for various pizza types, enabling better operational decisions.
 
-Tree-based ensemble methods like Random Forest, XGBoost, and Gradient Boosting have demonstrated strong performance in structured datasets due to their ability to model non-linearities and interactions automatically. On the other hand, Support Vector Regression (SVR), while powerful in high-dimensional spaces, can sometimes be sensitive to parameter tuning and input scaling.
+2. Literature Review
 
-Model interpretability is also critical. Tree-based models can be analyzed using SHAP (SHapley Additive exPlanations) values, which help visualize how individual features influence predictions, adding transparency to model decisions.
-🧪 Methodology
-🔧 Data Pipeline
+Classical statistical models like ARIMA and exponential smoothing have long been used for time series forecasting. However, machine learning techniques have shown increasing effectiveness in capturing nonlinear patterns and complex dependencies. Random Forest, XGBoost, and Support Vector Regression (SVR) have proven useful for structured data prediction, while deep learning models like LSTM are particularly effective at modeling temporal sequences.
 
-    Dataset: Daily pizza sales from a fictional pizzeria.
+Model interpretability also plays a key role in model adoption. SHAP (SHapley Additive exPlanations) is used in this project to understand the influence of features in tree-based models.
 
-    Preprocessing: Temporal features were extracted, and each pizza type was modeled individually.
+3. Methodology
 
-    Train-Test Split: The data was split using a time-based approach to preserve the chronological order.
+3.1 Data Preparation
 
-🔬 Models Compared
+    Source: Pizza sales dataset from an Excel spreadsheet.
 
-The following models were implemented and compared:
+    Preprocessing: Feature engineering includes date-based features and normalization.
 
-    LinearRegressionModel: A basic linear approach.
+    Split: The data is split into training and testing sets (80/20) without shuffling to preserve time-based order.
 
-    SupportVectorModel: SVR with RBF kernel.
+3.2 Models Tested
 
-    RandomForestModel: Bagging ensemble of decision trees.
+The following models were implemented in a modular, object-oriented structure:
 
-    XGBoostModel: Gradient boosting framework optimized for performance.
+    Linear Regression
 
-    GradientBoostingModel: A traditional implementation of gradient boosting.
+    Random Forest
 
-🛠 Hyperparameter Tuning
+    Gradient Boosting
 
-Each model (where applicable) was tuned using RandomizedSearchCV with 5-fold cross-validation, optimizing for Root Mean Squared Error (RMSE).
-📈 Evaluation Metrics
+    XGBoost
 
-Models were evaluated using:
+    Support Vector Regression
+
+    LSTM (Long Short-Term Memory Neural Network)
+
+Each model is tuned (except LSTM) using RandomizedSearchCV to avoid overfitting while finding optimal hyperparameters.
+
+3.3 Evaluation Metrics
+
+The models are evaluated using:
 
     RMSE (Root Mean Squared Error)
 
@@ -45,33 +48,29 @@ Models were evaluated using:
 
     MAPE (Mean Absolute Percentage Error)
 
-Additionally, SHAP values were used to interpret feature contributions for tree-based models.
-📊 Results
-Model	CV RMSE	Test RMSE	MAE	MAPE (%)
+Cross-validation is used to validate model robustness. Visualizations of prediction and SHAP plots help explain the models' behavior.
+
+
+4. Model Performance Results
+Model	Cross-validated RMSE	RMSE	MAE	MAPE
 Random Forest	2.75	2.93	2.28	51.14
 XGBoost	3.02	3.19	2.43	53.44
 Gradient Boosting	2.93	3.02	2.31	51.76
 Support Vector	2.76	3.04	2.35	52.93
 Linear Regression	2.88	3.02	2.27	53.36
-🏆 Best Performing Model
+LSTM	2.97	2.95	2.17	49.79
 
-    Random Forest had the lowest RMSE and MAE overall, making it the most accurate model in this experiment.
 
-🔍 Interpretability with SHAP
+SHAP summary plots were generated for all tree-based models to interpret the impact of each feature on the model's predictions.
+5. Conclusion and Next Steps
 
-SHAP plots were generated for tree-based models (Random Forest, XGBoost, and Gradient Boosting). These visualizations highlighted the most influential features on model predictions, enhancing transparency and trust in model behavior.
+This project highlights how different machine learning models perform on demand forecasting tasks in the food industry. Random Forest and Gradient Boosting provided the best performance, balancing prediction accuracy and interpretability. The modular architecture allows easy testing of new models.
+5.1 Next Steps:
 
-Example:
-(Assumes plot is generated and saved correctly)
-✅ Conclusion & Next Steps
+    Fine-tune and evaluate the LSTM model further.
 
-This project demonstrates the feasibility and value of using machine learning models for sales demand forecasting. Among all tested models, Random Forest showed the best balance between performance and interpretability.
-🚀 Future Improvements
+    Explore multi-output forecasting (predict multiple pizzas at once).
 
-    Add seasonal decomposition or exogenous variables (e.g., holidays, weather).
+    Integrate weather, promotions, and holiday data for richer context.
 
-    Explore deep learning approaches like LSTM for temporal dependencies.
-
-    Implement automated retraining pipelines for production use.
-
-    Compare results using probabilistic forecasting models (e.g., Prophet, NGBoost).
+    Deploy the best model in a real-time prediction API.
