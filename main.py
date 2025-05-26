@@ -4,10 +4,10 @@ from core.evaluation import Evaluator, plot_predictions
 from models.linear_regression import LinearRegressionModel
 from models.random_forest import RandomForestModel
 from models.xgboost_model import XGBoostModel
-from models.lightgbm_model import LightGBMModel
 from models.support_vector_model import SupportVectorModel
 from models.gradient_boosting_model import GradientBoostingModel
 from models.tuner import ModelTuner
+from models.lstm_model import LSTMModel
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, cross_val_score
 import matplotlib.pyplot as plt
@@ -35,7 +35,8 @@ def run_pipeline():
         "XGBoost": XGBoostModel(),
         "Gradient Boosting": GradientBoostingModel(),
         "Support Vector": SupportVectorModel(),
-        "Linear Regression": LinearRegressionModel()
+        "Linear Regression": LinearRegressionModel(),
+        "LSTM": LSTMModel(input_shape=(X_train.shape[1], 1))
     }
 
     best_models = {}
@@ -48,14 +49,17 @@ def run_pipeline():
         best_model = ModelTuner.tune(model, X_train, y_train)
         best_models[name] = best_model
 
-        # Cross-validation score
-        cv_scores = cross_val_score(best_model.model, X_train, y_train, scoring='neg_root_mean_squared_error', cv=5)
-        mean_rmse = -np.mean(cv_scores)
+        if name != "LSTM":
+            cv_scores = cross_val_score(best_model.model, X_train, y_train, scoring='neg_root_mean_squared_error', cv=5)
+            mean_rmse = -np.mean(cv_scores)
+        else:
+            best_model.train(X_train, y_train)
+            y_pred = best_model.predict(X_test)
+            mean_rmse = Evaluator.evaluate(y_test, y_pred)['RMSE']
+
         scores[name] = mean_rmse
         print(f"Cross-validated RMSE for {name}: {mean_rmse:.2f}")
 
-
-        # Final evaluation
         best_model.train(X_train, y_train)
         y_pred = best_model.predict(X_test)
         metrics = Evaluator.evaluate(y_test, y_pred)
@@ -65,26 +69,20 @@ def run_pipeline():
             print(f"{metric}: {value:.2f}")
 
         plot_predictions(y_test, y_pred, name)
-        
-        
-        
-        
-        ## PLOT FOR EXPLAINABILITY IN TEST ## 
-    
-        if name in ["Random Forest", "XGBoost", "LightGBM"]:
-            print(f"Generating SHAP values for {name}...")
-            model = best_model.model  # Unwrap underlying model
 
-            # Use TreeExplainer for tree-based models
+
+
+        # PLOT FOR EXPLAINABILITY IN TEST
+        if name in ["Random Forest", "XGBoost"]:
+            print(f"Generating SHAP values for {name}...")
+            model = best_model.model
+
             explainer = shap.TreeExplainer(model)
             shap_values = explainer.shap_values(X_train)
 
-            # Convert to shap.Explanation if needed
             shap.summary_plot(shap_values, X_train, show=False, plot_type="dot")
             plt.title(f"SHAP Summary Plot: {name}")
-            # plt.savefig(f"plots/shap_{name.lower().replace(' ', '_')}.png")
-            plt.close()
-
+            plt.show()
 
 
     # Plot comparison of models

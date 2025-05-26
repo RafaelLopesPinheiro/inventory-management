@@ -22,4 +22,7 @@ def plot_predictions(y_true, y_pred, title):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
+    filename = f"plots/prediction_{title.lower().replace(' ', '_')}.png"
+    plt.savefig(filename)
     plt.show()
+    plt.close()

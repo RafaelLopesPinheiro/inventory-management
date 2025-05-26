@@ -6,6 +6,12 @@ import numpy as np
 class ModelTuner:
     @staticmethod
     def tune(model: BaseEstimator, X, y):
+        class_name = model.__class__.__name__
+
+        if class_name == "LSTMModel":
+            return ModelTuner._tune_lstm(model, X, y)
+        
+        
         if hasattr(model, 'get_params'):
             if model.__class__.__name__ == "RandomForestModel":
                 param_grid = {
@@ -42,3 +48,34 @@ class ModelTuner:
             return model
         else:
             return model
+
+
+
+    @staticmethod
+    def _tune_lstm(model, X, y):
+        best_model = None
+        best_rmse = float("inf")
+        best_config = None
+
+        input_shape = (X.shape[1], 1)
+        configs = [
+            {'epochs': 20, 'batch_size': 16},
+            {'epochs': 30, 'batch_size': 32},
+            {'epochs': 50, 'batch_size': 64},
+        ]
+
+        for config in configs:
+            candidate = model.__class__(input_shape=input_shape,
+                                        epochs=config['epochs'],
+                                        batch_size=config['batch_size'])
+            candidate.train(X, y)
+            y_pred = candidate.predict(X)
+            rmse = np.sqrt(np.mean((y - y_pred) ** 2))
+
+            if rmse < best_rmse:
+                best_rmse = rmse
+                best_model = candidate
+                best_config = config
+
+        print(f"Best LSTM config: {best_config} with RMSE: {best_rmse:.2f}")
+        return best_model
