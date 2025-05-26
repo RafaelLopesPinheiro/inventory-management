@@ -67,9 +67,8 @@ SHAP summary plots were generated for all tree-based models to interpret the imp
 5. Conclusion and Next Steps
 
 This project highlights how different machine learning models perform on demand forecasting tasks in the food industry. Random Forest and Gradient Boosting provided the best performance, balancing prediction accuracy and interpretability. The modular architecture allows easy testing of new models.
-5.1 Next Steps:
 
-    Fine-tune and evaluate the LSTM model further.
+5.1 Next Steps:
 
     Explore multi-output forecasting (predict multiple pizzas at once).
 
