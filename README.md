@@ -52,13 +52,15 @@ Cross-validation is used to validate model robustness. Visualizations of predict
 
 
 4. Model Performance Results
-Model	Cross-validated RMSE	RMSE	MAE	MAPE
-Random Forest	2.75	2.93	2.28	51.14
-XGBoost	3.02	3.19	2.43	53.44
-Gradient Boosting	2.93	3.02	2.31	51.76
-Support Vector	2.76	3.04	2.35	52.93
-Linear Regression	2.88	3.02	2.27	53.36
-LSTM	2.97	2.95	2.17	49.79
+
+| Model              | Cross-validated RMSE | RMSE | MAE  | MAPE  |
+|--------------------|----------------------|------|------|-------|
+| Random Forest       | 2.75                | 2.93 | 2.28 | 51.14 |
+| XGBoost             | 3.02                | 3.19 | 2.43 | 53.44 |
+| Gradient Boosting   | 2.93                | 3.02 | 2.31 | 51.76 |
+| Support Vector      | 2.76                | 3.04 | 2.35 | 52.93 |
+| Linear Regression   | 2.88                | 3.02 | 2.27 | 53.36 |
+| LSTM                | 2.97                | 2.95 | 2.17 | 49.79 |
 
 
 SHAP summary plots were generated for all tree-based models to interpret the impact of each feature on the model's predictions.
