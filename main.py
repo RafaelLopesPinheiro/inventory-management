@@ -34,7 +34,8 @@ def run_pipeline():
         "Random Forest": RandomForestModel(),
         "XGBoost": XGBoostModel(),
         "Gradient Boosting": GradientBoostingModel(),
-        "Support Vector": SupportVectorModel()
+        "Support Vector": SupportVectorModel(),
+        "Linear Regression": LinearRegressionModel()
     }
 
     best_models = {}
@@ -83,6 +84,8 @@ def run_pipeline():
             plt.title(f"SHAP Summary Plot: {name}")
             # plt.savefig(f"plots/shap_{name.lower().replace(' ', '_')}.png")
             plt.close()
+
+
 
     # Plot comparison of models
     plt.figure(figsize=(10, 6))
